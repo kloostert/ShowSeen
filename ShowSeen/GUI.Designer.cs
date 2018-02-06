@@ -66,6 +66,7 @@ namespace ShowSeen
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.button9 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -333,18 +334,18 @@ namespace ShowSeen
             // 
             // toolStripStatusLabel2
             // 
-            this.toolStripStatusLabel2.Margin = new System.Windows.Forms.Padding(440, 3, 3, 2);
+            this.toolStripStatusLabel2.Margin = new System.Windows.Forms.Padding(410, 3, 3, 2);
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(119, 17);
-            this.toolStripStatusLabel2.Text = "© 2015 Thijs Klooster";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(148, 17);
+            this.toolStripStatusLabel2.Text = "© 2015-2017 Thijs Klooster";
             // 
             // pictureBox1
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox1.Image = global::ShowSeen.Properties.Resources.GoT;
-            this.pictureBox1.Location = new System.Drawing.Point(459, 13);
+            this.pictureBox1.Location = new System.Drawing.Point(539, 13);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(306, 41);
+            this.pictureBox1.Size = new System.Drawing.Size(225, 37);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 8;
             this.pictureBox1.TabStop = false;
@@ -353,8 +354,8 @@ namespace ShowSeen
             // 
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "TV Show name",
-            "Air date"});
+            "Air date",
+            "TV Show name"});
             this.comboBox1.Location = new System.Drawing.Point(332, 20);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
@@ -416,11 +417,22 @@ namespace ShowSeen
             this.label12.TabIndex = 11;
             this.label12.Text = "10";
             // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(459, 20);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(75, 23);
+            this.button9.TabIndex = 14;
+            this.button9.Text = "Sync";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(775, 514);
+            this.Controls.Add(this.button9);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label12);
@@ -500,5 +512,6 @@ namespace ShowSeen
         private Label label10;
         private Label label11;
         private Label label12;
+        private Button button9;
     }
 }

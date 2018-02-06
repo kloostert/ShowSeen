@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using ShowSeen.Resources;
+using System.Net;
+using System.IO;
+using CsQuery;
+using System.Globalization;
 
 namespace ShowSeen
 {
@@ -17,19 +21,19 @@ namespace ShowSeen
     {
 
         public static string source = ".\\Resources\\ShowSeen.accdb";
-        
 
-        public void PopulateListBox() 
+
+        public void PopulateListBox()
         {
             // 
             // listBox1 Initialization query
             // 
             string str = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + source;
-            string query = "SELECT * FROM Shows ORDER BY Shows.ShowName ASC";
+            string query = "SELECT * FROM Shows ORDER BY Shows.Airs ASC";
 
-            try 
-            { 
-                OleDbConnection con = new OleDbConnection(str); 
+            try
+            {
+                OleDbConnection con = new OleDbConnection(str);
                 OleDbCommand cmd = new OleDbCommand(query, con);
                 con.Open();
                 OleDbDataReader dreader = cmd.ExecuteReader();
@@ -52,7 +56,7 @@ namespace ShowSeen
                     int space1len;
                     if (result[0] == "Homeland" || result[0] == "Teen Wolf")
                     {
-                            space1len = 2;
+                        space1len = 2;
                     }
                     else if (result[0].Length <= 9)
                     {
@@ -99,7 +103,7 @@ namespace ShowSeen
                     string space6 = String.Concat(Enumerable.Repeat("\t", space5len));
                     string space7 = String.Concat(Enumerable.Repeat("\t  ", space5len));
 
-                    string listItem =   result[0] + space1 +
+                    string listItem = result[0] + space1 +
                                         result[1] + space2 +
                                         result[2] + space3 +
                                         result[3] + space4 +
@@ -113,26 +117,7 @@ namespace ShowSeen
 
                 con.Close();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);}
-
-        }
-
-        public void PopulateDataGridViewTest()
-        {
-            DataTable table = new DataTable();
-            table.Columns.Add("Dosage", typeof(int));
-            table.Columns.Add("Drug", typeof(string));
-            table.Columns.Add("Patient", typeof(string));
-            table.Columns.Add("Date", typeof(DateTime));
-
-            // Here we add five DataRows.
-            table.Rows.Add(25, "Indocin", "David", DateTime.Now);
-            table.Rows.Add(50, "Enebrel", "Sam", DateTime.Now);
-            table.Rows.Add(10, "Hydralazine", "Christoff", DateTime.Now);
-            table.Rows.Add(21, "Combivent", "Janet", DateTime.Now);
-            table.Rows.Add(100, "Dilantin", "Melanie", DateTime.Now);
-
-            dataGridView1.DataSource = table;
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error); }
 
         }
 
@@ -170,14 +155,14 @@ namespace ShowSeen
                     string tbaday = dreader["TBAday"].ToString();
                     string tbamonth = dreader["TBAmonth"].ToString();
                     string tba = dreader["TBA"].ToString();
-                    
+
 
                     airs = airs.Substring(0, airs.IndexOf(" "));
                     tbaday = tbaday == "True" ? "✓" : " ";
                     tbamonth = tbamonth == "True" ? "✓" : " ";
                     tba = tba == "True" ? "✓" : " ";
 
-                    table.Rows.Add(     showname,
+                    table.Rows.Add(showname,
                                         Convert.ToInt32(season),
                                         Convert.ToInt32(episode),
                                         airs,
@@ -185,9 +170,9 @@ namespace ShowSeen
                                         Convert.ToChar(tbaday),
                                         Convert.ToChar(tbamonth),
                                         Convert.ToChar(tba),
-                                        Convert.ToInt32(id)             );
+                                        Convert.ToInt32(id));
 
-                    
+
                 }
                 string count = Convert.ToString(table.Rows.Count);
                 dataGridView1.DataSource = table;
@@ -223,9 +208,9 @@ namespace ShowSeen
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
-            catch (Exception ex) 
-            { 
-                MessageBox.Show(ex.Message, "TV Shows", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "TV Shows", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -252,7 +237,7 @@ namespace ShowSeen
             {
                 PopulateDataGridView(label10.Text);
             }
-            
+
         }
 
         public int getCurrentId()
@@ -264,9 +249,10 @@ namespace ShowSeen
         public GUI()
         {
             InitializeComponent();
+
             //PopulateListBox();
             //PopulateDataGridViewTest();
-            PopulateDataGridView("SELECT * FROM Shows ORDER BY Shows.ShowName ASC");
+            PopulateDataGridView("SELECT * FROM Shows ORDER BY Shows.Airs ASC");
             ResizeColWidth();
             comboBox1.SelectedIndex = 0;
         }
@@ -324,7 +310,7 @@ namespace ShowSeen
             int id = Convert.ToInt32(dataGridView1.Rows[rownr].Cells[8].Value);
             string name = Convert.ToString(dataGridView1.Rows[rownr].Cells[0].Value);
 
-            DialogResult result = MessageBox.Show("Do you really want to delete the data of " + name + 
+            DialogResult result = MessageBox.Show("Do you really want to delete the data of " + name +
                 "?\nThis data will be permanently lost!", "TV Shows",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
 
@@ -338,7 +324,7 @@ namespace ShowSeen
                 default:
                     break;
             }
-            
+
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -374,20 +360,20 @@ namespace ShowSeen
             string query, q;
             switch (comboBox1.SelectedIndex)
             {
-                case 0:
-                    query = label10.Text;
-                    q = query.Replace("Shows.Airs", "Shows.ShowName");
-                    
-                    label10.Text = q;
-                    break;
                 case 1:
                     query = label10.Text;
+                    q = query.Replace("Shows.Airs", "Shows.ShowName");
+
+                    label10.Text = q;
+                    break;
+                case 0:
+                    query = label10.Text;
                     q = query.Replace("Shows.ShowName", "Shows.Airs");
-                    
+
                     label10.Text = q;
                     break;
             }
-            
+
             setChanged();
 
         }
@@ -398,7 +384,7 @@ namespace ShowSeen
             {
                 textBox1.ForeColor = Color.Black;
                 string value = textBox1.Text;
-                string query = "SELECT * FROM Shows WHERE ShowName LIKE '%" + value + "%' ORDER BY Shows.ShowName ASC";
+                string query = "SELECT * FROM Shows WHERE ShowName LIKE '%" + value + "%' ORDER BY Shows.Airs ASC";
                 label10.Text = query;
                 setChanged();
             }
@@ -419,6 +405,129 @@ namespace ShowSeen
             }
         }
 
+        public string GetReq(string uri, string season)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri + season);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+
+        public Tuple<int,DateTime> parseHTML(string html, string episode)
+        {
+            CQ dom = html;
+
+            int currEpi = Int32.Parse(episode) + 1;
+            int episodeNR = 0;
+            string airdate = "";
+
+            var eps = dom[".info"];
+            foreach (var e in eps)
+            {
+                episodeNR = Int32.Parse(e.ChildNodes[1].GetAttribute("content"));
+                if (episodeNR == currEpi)
+                {
+                    airdate = e.ChildNodes[3].InnerHTML;
+                    break;
+                }
+                
+            }
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            string date = airdate.ToString().Trim();
+            if (date.Length > 10)
+            {
+                var result = DateTime.ParseExact(airdate.ToString().Trim(), "d MMM. yyyy", provider);
+                return new Tuple<int, DateTime>(episodeNR, result);
+            }
+            else if (date.Length > 5)
+            {
+                var result = DateTime.ParseExact(airdate.ToString().Trim(), "MMM. yyyy", provider);
+                return new Tuple<int, DateTime>(episodeNR, result);
+            }
+            else if (date.Length > 3)
+            {
+                var result = DateTime.ParseExact(airdate.ToString().Trim(), "yyyy", provider);
+                return new Tuple<int, DateTime>(episodeNR, result);
+            }
+            else
+            {
+                return new Tuple<int, DateTime>(0, DateTime.MinValue);
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            string str = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + source;
+            string q = "SELECT * FROM Shows ORDER BY Shows.Airs ASC";
+            try
+            {
+                OleDbConnection con = new OleDbConnection(str);
+                OleDbCommand cmd = new OleDbCommand(q, con);
+                con.Open();
+                OleDbDataReader dreader = cmd.ExecuteReader();
+
+                while (dreader.Read())
+                {
+                    Application.DoEvents();
+                    string id = dreader["ID"].ToString();
+                    string season = dreader["Season"].ToString();
+                    string episode = dreader["Episode"].ToString();
+                    string link = dreader["Link"].ToString();
+
+                    if (link.Equals("")) { continue; }
+
+                    // Process one entry in the DB (one tv show)
+                    try
+                    {
+                        var html = GetReq(link, season);
+                        var res = parseHTML(html, episode);
+
+                        if (res.Item2.Equals(DateTime.MinValue))
+                        {
+                            CQ dom = html;
+                            var seasons = dom["#bySeason"];
+                            if (seasons.Children().Length > Int32.Parse(season))
+                            {
+                                html = GetReq(link, season + 1);
+                                res = parseHTML(html, "0");
+                            }
+                            if (res.Item2.Equals(DateTime.MinValue))
+                            {
+                                html = GetReq(link, season + 1);
+                                res = parseHTML(html, "-1");
+                            }
+                        }
+
+                        if (!res.Item2.Equals(DateTime.MinValue))
+                        {
+                            string query = "UPDATE Shows SET Airs='" + res.Item2.AddDays(1).ToString() + "' WHERE (ID=" + id + ")";
+                            executeCMDQuery(query);
+                            setChanged();
+                        }
+                        else
+                        {
+                            string query = "UPDATE Shows SET Airs='" + DateTime.MaxValue.ToString() + "' WHERE (ID=" + id + ")";
+                            executeCMDQuery(query);
+                            setChanged();
+                        }
+                    }
+                    catch { continue; }
+                    //break;
+                }
+                con.Close();
+                MessageBox.Show("Synchronized with IMDb.", "TV Shows", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "TV Shows", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
 
     }
 }
