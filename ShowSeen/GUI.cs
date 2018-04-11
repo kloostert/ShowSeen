@@ -446,12 +446,12 @@ namespace ShowSeen
             }
             else if (date.Length > 5)
             {
-                var result = DateTime.ParseExact(airdate.ToString().Trim(), "MMM. yyyy", provider);
+                var result = DateTime.ParseExact(airdate.ToString().Trim(), "MMM. yyyy", provider).AddDays(25);
                 return new Tuple<int, DateTime>(episodeNR, result);
             }
             else if (date.Length > 3)
             {
-                var result = DateTime.ParseExact(airdate.ToString().Trim(), "yyyy", provider);
+                var result = DateTime.ParseExact(airdate.ToString().Trim(), "yyyy", provider).AddMonths(11).AddDays(25);
                 return new Tuple<int, DateTime>(episodeNR, result);
             }
             else

@@ -337,7 +337,7 @@ namespace ShowSeen
             this.toolStripStatusLabel2.Margin = new System.Windows.Forms.Padding(410, 3, 3, 2);
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(148, 17);
-            this.toolStripStatusLabel2.Text = "© 2015-2017 Thijs Klooster";
+            this.toolStripStatusLabel2.Text = "© 2015-2018 Thijs Klooster";
             // 
             // pictureBox1
             // 
