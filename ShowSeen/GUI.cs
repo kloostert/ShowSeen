@@ -439,9 +439,16 @@ namespace ShowSeen
             }
             CultureInfo provider = CultureInfo.InvariantCulture;
             string date = airdate.ToString().Trim();
-            if (date.Length > 10)
+            if (date.Length > 9)
             {
-                var result = DateTime.ParseExact(airdate.ToString().Trim(), "d MMM. yyyy", provider);
+                var result = DateTime.MinValue;
+                try {
+                    result = DateTime.ParseExact(airdate.ToString().Trim(), "d MMM. yyyy", provider);
+                } catch
+                {
+                    Console.WriteLine("Trying other format...");
+                    result = DateTime.ParseExact(airdate.ToString().Trim(), "d MMMM yyyy", provider);
+                }
                 return new Tuple<int, DateTime>(episodeNR, result);
             }
             else if (date.Length > 5)
